@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">F_manager</string>
+    <string name="textview_register">Fill out form</string>
+    <string name="farm_name">Farm Name</string>
+    <string name="email_address">Email Address</string>
+    <string name="register">Register</string>
+</resources>
