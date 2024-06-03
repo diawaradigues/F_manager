@@ -4,4 +4,39 @@
     <string name="farm_name">Farm Name</string>
     <string name="email_address">Email Address</string>
     <string name="register">Register</string>
+    <string-array name="dropdown_array_expCat">
+        <item>Housing and Equipment</item>
+        <item>Insurance</item>
+        <item>Property Taxes</item>
+        <item>Salaries</item>
+        <item>Loan Payments</item>
+        <item>Utilities</item>
+        <item>Others</item>
+    </string-array>
+    <string-array name="dropdownArray_fixedOthers">
+        <item>Chicks</item>
+        <item>Feed</item>
+        <item>Medications and Vaccination</item>
+        <item>Labour</item>
+        <item>Bedding Materials</item>
+        <item>Transport</item>
+        <item>Maintenance and Repairs</item>
+        <item>Miscellaneous Supplies</item>
+        <item>Marketing and Sales Costs</item>
+    </string-array>
+    <string-array name="dropdownArray_fixedHousing">
+        <item>Construction</item>
+        <item>Lease</item>
+        <item>Depreciation</item>
+    </string-array>
+    <string-array name="dropdownArray_fixedInsurance">
+        <item>Property</item>
+        <item>Equipment</item>
+    </string-array>
+    <string-array name="dropdown_array_fixedCat">
+        <item>Taxes on Lands and Buildings</item>
+        <item>Permanent Staff</item>
+        <item>interest and Principles on Loans</item>
+        <item>Basic Utility Charges</item>
+    </string-array>
 </resources>

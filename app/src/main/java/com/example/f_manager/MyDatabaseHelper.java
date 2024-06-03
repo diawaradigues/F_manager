@@ -40,6 +40,35 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                     "Name TEXT,"+
                     "FOREIGN KEY(Farm_id) REFERENCES Farm(Farm_id) ON DELETE CASCADE)";
 
+    private static final String SQL_CREATE_SALES=
+            "CREATE TABLE IF NOT EXISTS Sales (" +
+                    "sales_id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "Date DATE," +
+                    "Customer TEXT(255),"+
+                    "Quantity_of_Birds INTEGER,"+
+                    "Unit_cost REAL,"+
+                    "Price REAL,"+
+                    "User_id INTEGER,"+
+                    "Cycle_id INTEGER,"+
+                    "FOREIGN KEY(Cycle_id) REFERENCES CYCLES(Cycle_id) ON DELETE CASCADE,"+
+                    "FOREIGN KEY(User_id) REFERENCES USER(User_id) ON DELETE CASCADE)";
+
+    private static final String SQL_CREATE_EXPENDITURE=
+            "CREATE TABLE IF NOT EXISTS Expenditure (" +
+                    "Expenditure_id INTEGER PRIMARY KEY AUTOINCREMENT," + 
+                    "Expense_Category TEXT(255)," +
+                    "Fixed_Expenses TEXT(255),"+
+                    "Expense TEXT(255),"+
+                    "Amount REAL,"+
+                    "User_id INTEGER,"+
+                    "Cycle_id INTEGER,"+
+                    "Created_date_ DATE,"+
+                    "Farm_id INTEGER,"+
+                    "Name TEXT,"+
+                    "FOREIGN KEY(Farm_id) REFERENCES Farm(Farm_id) ON DELETE CASCADE,"+
+                    "FOREIGN KEY(Cycle_id) REFERENCES CYCLES(Cycle_id) ON DELETE CASCADE,"+
+                    "FOREIGN KEY(User_id) REFERENCES USER(User_id) ON DELETE CASCADE)";
+
     public MyDatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME,null, DATABASE_VERSION);
     }
@@ -50,7 +79,9 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("PRAGMA foreign_keys = ON;");
         sqLiteDatabase.execSQL(SQL_CREATE_FARM);
         sqLiteDatabase.execSQL(SQL_CREATE_USER);
+        sqLiteDatabase.execSQL(SQL_CREATE_EXPENDITURE);
         sqLiteDatabase.execSQL(SQL_CREATE_CYCLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_SALES);
     }
 
     @Override

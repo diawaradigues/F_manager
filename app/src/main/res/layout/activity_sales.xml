@@ -14,38 +14,44 @@
         android:layout_height="wrap_content"
         android:text="Sales"
         android:textSize="22sp"
+        android:layout_marginBottom="8dp"
         android:layout_gravity="center_horizontal"
         android:textStyle="bold"/>
 
     <TextView
-        android:id="@+id/textView12"
+        android:id="@+id/salesCustomerName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="CustomerName"
+        android:layout_marginBottom="8dp"
+        android:text="Customer Name"
         android:textSize="18sp"/>
 
     <EditText
-        android:id="@+id/editTextText4"
+        android:id="@+id/edit_customer_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:focusable="false"
+        android:layout_marginBottom="8dp"
         android:clickable="true"
         android:ems="10"
+        android:focusable="false"
         android:inputType="text" />
+
 
     <TextView
         android:id="@+id/textView13"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Quantity"
+        android:layout_marginBottom="8dp"
+        android:text="Quantity of Birds"
         android:textSize="18sp"/>
 
     <EditText
-        android:id="@+id/editTextNumberDecimal"
+        android:id="@+id/edit_quantity"
         android:focusable="false"
         android:clickable="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:ems="10"
         android:inputType="numberDecimal" />
 
@@ -53,15 +59,17 @@
         android:id="@+id/textView14"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:text="Unit Cost"
         android:textSize="18sp"/>
 
     <EditText
-        android:id="@+id/editTextNumberDecimal2"
+        android:id="@+id/edit_unit_cost"
         android:focusable="false"
         android:clickable="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:ems="10"
         android:inputType="numberDecimal" />
 
@@ -69,22 +77,41 @@
         android:id="@+id/textView15"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:text="Price"
         android:textSize="18sp"/>
 
     <EditText
-        android:id="@+id/editTextNumberDecimal3"
+        android:id="@+id/edit_price"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:focusable="false"
         android:clickable="true"
         android:ems="10"
         android:inputType="numberDecimal" />
 
     <TextView
+        android:id="@+id/textView18"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:textSize="18sp"
+        android:text="Date" />
+
+    <EditText
+        android:id="@+id/edit_date_sales"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:ems="10"
+        android:inputType="date" />
+
+    <TextView
         android:id="@+id/textView17"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:text="Balance :"
         android:textSize="18sp" />
 
@@ -92,7 +119,15 @@
         android:id="@+id/textView16"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:text="Status :"
         android:textSize="18sp"/>
+
+    <Button
+        android:id="@+id/add_sale"
+        android:layout_width="128dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Add Sale"/>
 
 </LinearLayout>

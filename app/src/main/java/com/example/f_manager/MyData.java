@@ -1,26 +1,27 @@
 package com.example.f_manager;
 
 public class MyData {
-    private int id;
-    private String name;
-    private int age;
+    private String cycleTitle;
+    private String cycleDate;
 
-    public MyData(int id, String name, int age) {
-        this.id = id;
-        this.name = name;
-        this.age = age;
+    public MyData(String cycleTitle, String cycleDate) {
+        this.cycleTitle = cycleTitle;
+        this.cycleDate = cycleDate;
     }
 
-    // Getter methods
-    public int getId() {
-        return id;
+    public void setCycleTitle(String cycleTitle) {
+        this.cycleTitle = cycleTitle;
     }
 
-    public String getName() {
-        return name;
+    public void setCycleDate(String cycleDate) {
+        this.cycleDate = cycleDate;
     }
 
-    public int getAge() {
-        return age;
+    public String getCycleTitle() {
+        return cycleTitle;
+    }
+
+    public String getCycleDate() {
+        return cycleDate;
     }
 }
