@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.f_manager"
-        minSdk 24
+        minSdk 26
         targetSdk 34
         versionCode 1
         versionName "1.0"
@@ -25,6 +25,10 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+        incremental true
+    }
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << "-Xlint:deprecation"
     }
 }
 
@@ -33,6 +37,7 @@ dependencies {
     implementation "com.google.code.gson:gson:2.8.8"
     implementation "com.squareup.retrofit2:converter-gson:2.10.0"
     implementation "androidx.recyclerview:recyclerview:1.3.2"
+    implementation 'androidx.cardview:cardview:1.0.0'
     // For Excel file handling
     implementation 'org.apache.poi:poi:5.2.3'
     implementation 'org.apache.poi:poi-ooxml:5.2.3'

@@ -2,92 +2,146 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-
+    android:layout_gravity="center_vertical"
     android:orientation="vertical"
     android:padding="10dp">
-
     <LinearLayout
+        tools:context=".MainActivity"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="10dp">
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/form_card"
-            android:clickable="true"
-            android:layout_width="match_parent"
-            android:layout_height="95dp"
-            app:cardCornerRadius="4dp"
-            app:cardElevation="6dp">
-
+        <TextView
+            android:id="@+id/textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Retrofit"/>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/dashBoardCard"
+                android:clickable="true"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="95dp"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="6dp">
             <TextView
-                android:id="@+id/textview_dashboard"
-                android:textStyle="bold"
-                android:textSize="20dp"
                 android:layout_width="wrap_content"
+                android:textStyle="bold"
+                android:textSize="20sp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:text="Forms" />
         </androidx.cardview.widget.CardView>
 
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/farm_cycle_card"
-            android:clickable="true"
-            android:layout_width="match_parent"
-            android:layout_height="95dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            app:cardCornerRadius="4dp"
-            app:cardElevation="6dp">
-
-            <TextView
-                android:id="@+id/textview_farm_cycles"
-                android:textStyle="bold"
-                android:textSize="20dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="Farm Cycles" />
-        </androidx.cardview.widget.CardView>
-
-
         <androidx.cardview.widget.CardView
             android:id="@+id/farmstats_card"
             android:clickable="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:layout_width="match_parent"
             android:layout_height="95dp"
             app:cardCornerRadius="4dp"
             app:cardElevation="6dp">
-
             <TextView
-                android:id="@+id/textview_Farmstat"
                 android:layout_width="wrap_content"
                 android:textStyle="bold"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="Farmstats" />
+                android:text="FarmStats" />
+        </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+            android:id="@+id/salesCard"
+            android:clickable="true"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="10dp"
+            android:layout_height="95dp"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="6dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Sales" />
+        </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+            android:id="@+id/expenditureCard"
+            android:clickable="true"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="10dp"
+            android:layout_height="95dp"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="6dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Expenditures" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/farm_cycle_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:clickable="true"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="6dp">
+            <TextView
+                android:id="@+id/textview_farm_cycles"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:text="Farm Cycles"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="40dp"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/button_ToNewCycles"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginRight="3dp"
+                    android:layout_marginTop="20dp"
+                    android:text="New Cycles"
+                    android:layout_height="wrap_content"/>
+                <Button
+                    android:id="@+id/button_ToEndedCycles"
+                    android:layout_marginLeft="3dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:text="Ended Cycles"
+                    android:layout_marginTop="20dp"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
         </androidx.cardview.widget.CardView>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Add Excel Data Sheet"
             android:layout_marginTop="10dp"
-            android:textSize="18dp"/>
-
+            android:textSize="18sp"/>
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floatingButtonReadExcel"
             android:layout_width="match_parent"
             android:layout_marginTop="10dp"
             android:layout_height="wrap_content"
             android:clickable="true"
-            app:srcCompat="@android:drawable/ic_input_add" />
+            app:srcCompat="@android:drawable/ic_input_add"
+            android:contentDescription="TODO" />
     </LinearLayout>
-
 </LinearLayout>

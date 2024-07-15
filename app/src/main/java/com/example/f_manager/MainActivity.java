@@ -8,11 +8,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -31,8 +34,9 @@ import retrofit2.http.Path;
 
 public class MainActivity extends AppCompatActivity {
     private static final int PICK_EXCEL_FILE = 1;
-    TextView text_view;
-    Button floatingExcelButton;
+    private TextView text_view;
+    private FloatingActionButton floatingExcelButton;
+    private Button buttonToAddCycles,buttonToEndedCycles;
 
     //networking interface
     interface  request_user{
@@ -52,14 +56,21 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        //linking cardViews
+        CardView toDashboard = findViewById(R.id.dashBoardCard);
+        CardView farmStats_ = findViewById(R.id.farmstats_card);
+        //CardView farmCycles_ = findViewById(R.id.farm_cycle_card);
+        CardView toSales = findViewById(R.id.salesCard);
+        CardView toExpenditure = findViewById(R.id.expenditureCard);
+
+        //OnClickListener for floatingAction button to call the method openFilePicker
         //Linking floatingAction button for Excel sheet
         floatingExcelButton = findViewById(R.id.floatingButtonReadExcel);
-        //linking cardViews
-        CardView farmStats_ = findViewById(R.id.farmstats_card);
-        CardView form_ = findViewById(R.id.form_card);
-        CardView farmCycles_ = findViewById(R.id.farm_cycle_card);
-        //OnClickListener for floatingAction button to call the method openFilePicker
         floatingExcelButton.setOnClickListener(view -> openFilePicker());
+
+        //buttons to cycles
+        buttonToAddCycles = findViewById(R.id.button_ToNewCycles);
+        buttonToEndedCycles = findViewById(R.id.button_ToEndedCycles);
 
         //Setting an onclick listener on the card
         farmStats_.setOnClickListener(v -> {
@@ -67,19 +78,30 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this,Farm_stats.class);
             startActivity(intent);
         });
-        form_.setOnClickListener(view -> {
-            //create an intent to start the Farm_stats activity
+        toDashboard.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, Dashboard.class);
             startActivity(intent);
         });
-        farmCycles_.setOnClickListener(view -> {
-            //create an intent to start the Farm_stats activity
+        //Toast.makeText(MainActivity.this,"Activity not found",Toast.LENGTH_SHORT).show();
+        buttonToAddCycles.setOnClickListener(view -> {
+            //create an intent to start the Farm cycles activity
             Intent intent = new Intent(MainActivity.this, Farm_cycles.class);
             startActivity(intent);
         });
+        buttonToEndedCycles.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, EndedCycles.class);
+            startActivity(intent);
+        });
+        toSales.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this,sales_activity.class);
+            startActivity(intent);
+        });
+        toExpenditure.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this,expenditure_activity.class);
+            startActivity(intent);
+        });
 
-
-        text_view=findViewById(R.id.textview_dashboard);
+        text_view=findViewById(R.id.textview);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://reqres.in")
@@ -89,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
         request_user requestUser = retrofit.create(request_user.class);
         requestUser.getUser("2").enqueue(new Callback<userData>() {
             @Override
-            public void onResponse(Call<userData> call, Response<userData> response) {
+            public void onResponse(@NonNull Call<userData> call, Response<userData> response) {
                 text_view.setText(response.body().data.last_name);
             }
 
@@ -118,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-    //processes the variable contaning the excel file and inserts the data in the database.
+    //processes the variable containing the excel file and inserts the data in the database.
     private void readExcelFile(Uri fileUri) {
         try (InputStream inputStream = getContentResolver().openInputStream(fileUri)) {
             assert inputStream != null;

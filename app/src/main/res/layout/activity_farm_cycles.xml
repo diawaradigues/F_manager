@@ -7,43 +7,70 @@
     tools:context=".Farm_cycles"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center"
+    android:layout_gravity="center_vertical"
     android:orientation="vertical"
     android:padding="16dp">
-        <TextView
-            android:id="@+id/add_cycles_text"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_marginTop="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="Add cycles" />
-
-        <EditText
-            android:id="@+id/cycle_title"
+    <androidx.cardview.widget.CardView
+        app:cardCornerRadius="8dp"
+        app:cardElevation="6dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:padding="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:ems="10"
-            android:inputType="number"
-            android:text="Name Cycle"/>
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/add_cycles_text"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Add cycles" />
+            <EditText
+                android:id="@+id/cycle_title"
+                android:textStyle="italic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:ems="10"
+                android:inputType="number"
+                android:text="Name Cycle"/>
+            <EditText
+                android:id="@+id/cycle_date_created"
+                android:textStyle="italic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="date"
+                android:layout_marginTop="10dp"
+                android:text="start date YY/MM/DD" />
+            <EditText
+                android:id="@+id/cycle_date_ended"
+                android:textStyle="italic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="date"
+                android:layout_marginTop="10dp"
+                android:text="end date YY/MM/DD" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
-        <EditText
-            android:id="@+id/cycle_date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="date"
-            android:layout_marginTop="10dp"
-            android:text="YY/MM/DD" />
-
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="2dp"
-            android:layout_marginTop="10dp"
-            android:background="@color/black" />
-
+    <Button
+        android:id="@+id/button_add_cycle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create New Cycle"
+        android:layout_marginTop="8dp"
+        android:layout_gravity="center_horizontal"/>
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/black" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="400dp"
@@ -55,11 +82,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
-    <Button
+    <!--<Button
         android:id="@+id/button_add_cycle"
         android:layout_gravity="center_horizontal"
         android:layout_width="120dp"
         android:layout_marginTop="15dp"
         android:layout_height="wrap_content"
-        android:text="Add Cycle" />
+        android:text="Add Cycle" />-->
 </LinearLayout>

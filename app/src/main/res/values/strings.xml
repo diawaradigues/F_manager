@@ -4,39 +4,32 @@
     <string name="farm_name">Farm Name</string>
     <string name="email_address">Email Address</string>
     <string name="register">Register</string>
-    <string-array name="dropdown_array_expCat">
-        <item>Housing and Equipment</item>
-        <item>Insurance</item>
-        <item>Property Taxes</item>
-        <item>Salaries</item>
-        <item>Loan Payments</item>
-        <item>Utilities</item>
-        <item>Others</item>
+    <string-array name="dropdownArray_Assets">
+        <item>Poultry Houses</item>
+        <item>Buildings</item>
+        <item>Equipment</item>
+        <item>Initial stock</item>
+        <item>Vehicles</item>
     </string-array>
-    <string-array name="dropdownArray_fixedOthers">
-        <item>Chicks</item>
+    <string-array name="dropdownArray_directCosts">
         <item>Feed</item>
-        <item>Medications and Vaccination</item>
+        <item>Chicks</item>
+        <item>Vaccination and Medication</item>
         <item>Labour</item>
         <item>Bedding Materials</item>
         <item>Transport</item>
+        <item>Utilities</item>
+    </string-array>
+    <string-array name="dropdownArray_indirectCosts">
+        <item>Management Salaries</item>
+        <item>Office Supplies</item>
         <item>Maintenance and Repairs</item>
-        <item>Miscellaneous Supplies</item>
-        <item>Marketing and Sales Costs</item>
+        <item>Marketing and Sales</item>
+        <item>Insurance</item>
+        <item>Depreciation of Property</item>
+        <item>Property Taxes</item>
+        <item>Loan Interests</item>
     </string-array>
-    <string-array name="dropdownArray_fixedHousing">
-        <item>Construction</item>
-        <item>Lease</item>
-        <item>Depreciation</item>
-    </string-array>
-    <string-array name="dropdownArray_fixedInsurance">
-        <item>Property</item>
-        <item>Equipment</item>
-    </string-array>
-    <string-array name="dropdown_array_fixedCat">
-        <item>Taxes on Lands and Buildings</item>
-        <item>Permanent Staff</item>
-        <item>interest and Principles on Loans</item>
-        <item>Basic Utility Charges</item>
-    </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

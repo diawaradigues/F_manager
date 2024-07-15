@@ -1,117 +1,285 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".Dashboard"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:id="@+id/form"
+    android:layout_height="wrap_content"
+    android:paddingTop="16dp"
+    android:paddingRight="10dp"
+    android:paddingLeft="10dp"
+    android:orientation="vertical">
+       <!-- <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+                <com.google.android.material.tabs.TabItem
+                    android:text="Tab1/user"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <com.google.android.material.tabs.TabItem
+                    android:text="Tab2/farm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <com.google.android.material.tabs.TabItem
+                    android:text="Tab1/user"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+        </com.google.android.material.tabs.TabLayout>
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="@string/textview_register"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+    <androidx.cardview.widget.CardView
+        app:cardCornerRadius="4dp"
+        app:cardElevation="6dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".Dashboard"
-        android:paddingTop="16dp"
-        android:paddingRight="10dp"
-        android:paddingLeft="10dp" 
-        android:orientation="vertical">
-
-        <TextView
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:padding="3dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="@string/textview_register"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/user_name"
-            android:layout_marginTop="20dp"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+                <EditText
+                    android:id="@+id/user_name"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:ems="10"
+                    android:inputType="text"
+                    android:textStyle="italic"
+                    android:text="Name" />
+                <EditText
+                    android:id="@+id/editTextPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="10dp"
+                    android:textStyle="italic"
+                    android:text="Phone number"
+                    android:ems="10"
+                    android:inputType="phone" />
+                <EditText
+                    android:id="@+id/editTextTextEmailAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="10dp"
+                    android:textStyle="italic"
+                    android:hint="region"
+                    android:ems="10"
+                    android:inputType="textEmailAddress"
+                    android:text="@string/email_address" />
+                <EditText
+                    android:id="@+id/region"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:ems="10"
+                    android:layout_marginTop="10dp"
+                    android:inputType="text"
+                    android:textStyle="italic"
+                    android:text="Region" />
+                <EditText
+                    android:id="@+id/role"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:ems="10"
+                    android:layout_marginTop="10dp"
+                    android:textStyle="italic"
+                    android:inputType="text"
+                    android:text="Role" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+                <Button
+                    android:id="@+id/button_registerUser"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="120dp"
+                    android:layout_gravity="center"
+                    android:layout_height="wrap_content"
+                    android:text="Register user" />
+              <!--  <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@color/black" />-->
+    <androidx.cardview.widget.CardView
+        app:cardCornerRadius="4dp"
+        android:layout_marginTop="10dp"
+        app:cardElevation="6dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:padding="3dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="text"
-            android:text="Name" />
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="About Farm"
+                        android:layout_marginTop="20dp"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:layout_gravity="center_horizontal"/>
+                    <EditText
+                        android:id="@+id/farm_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:ems="10"
+                        android:inputType="text"
+                        android:layout_marginTop="10dp"
+                        android:textStyle="italic"
+                        android:text="Farm name" />
+                    <EditText
+                        android:id="@+id/budget_farm"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:ems="10"
+                        android:layout_marginTop="10dp"
+                        android:inputType="numberDecimal"
+                        android:textStyle="italic"
+                        android:text="Budget Allotment" />
+                    <EditText
+                        android:id="@+id/farmLocation"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:ems="10"
+                        android:layout_marginTop="10dp"
+                        android:inputType="text"
+                        android:textStyle="italic"
+                        android:text="Farms Location" />
+                    <EditText
+                        android:id="@+id/editTextDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="10dp"
+                        android:ems="10"
+                        android:textStyle="italic"
+                        android:text="YY/MM/DD"
+                        android:inputType="date" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+                    <Button
+                        android:id="@+id/button_registerFarm"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_width="120dp"
+                        android:layout_gravity="center"
+                        android:layout_height="wrap_content"
+                        android:text="Register Farm" />
 
-        <EditText
-            android:id="@+id/editTextPhone"
+    <androidx.cardview.widget.CardView
+        app:cardCornerRadius="4dp"
+        app:cardElevation="6dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:padding="3dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Phone number"
-            android:ems="10"
-            android:inputType="phone" />
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+                <EditText
+                    android:id="@+id/num_broilers_produced"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:textStyle="italic"
+                    android:hint="Number of broilers produced"
+                    android:inputType="number" />
 
-        <EditText
-            android:id="@+id/editTextTextEmailAddress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:ems="10"
-            android:inputType="textEmailAddress"
-            android:text="@string/email_address" />
+                <EditText
+                    android:id="@+id/time_period_days"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:layout_height="48dp"
+                    android:textStyle="italic"
+                    android:hint="Time period (days)"
+                    android:inputType="number" />
+                <EditText
+                    android:id="@+id/total_feed_consumed"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:textStyle="italic"
+                    android:hint="Total feed consumed (kg)"
+                    android:inputType="numberDecimal" />
 
-        <EditText
-            android:id="@+id/region"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:layout_marginTop="20dp"
-            android:inputType="text"
-            android:text="Region" />
+                <EditText
+                    android:id="@+id/total_weight_gain"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:textStyle="italic"
+                    android:hint="Total weight gain (kg)"
+                    android:inputType="numberDecimal" />
+                <EditText
+                    android:id="@+id/num_broilers_died"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="italic"
+                    android:hint="Number of broilers died"
+                    android:inputType="number" />
+                <EditText
+                    android:id="@+id/total_num_broilers"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textStyle="italic"
+                    android:hint="Total number of broilers"
+                    android:inputType="number" />
 
-        <EditText
-            android:id="@+id/role"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:layout_marginTop="20dp"
-            android:inputType="text"
-            android:text="Role" />
-
-      <!--  <View
-            android:layout_width="fill_parent"
-            android:layout_height="2dp"
-            android:layout_marginTop="20dp"
-            android:background="@color/black" />-->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="About Farm"
-            android:layout_marginTop="20dp"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_gravity="center_horizontal"/>
-
-        <EditText
-            android:id="@+id/farm_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="text"
-            android:layout_marginTop="20dp"
-            android:text="Farm name" />
-
-        <EditText
-            android:id="@+id/budget_farm"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:layout_marginTop="20dp"
-            android:inputType="numberDecimal"
-            android:text="Budget Allotment" />
-
-
-        <EditText
-            android:id="@+id/editTextDate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:ems="10"
-            android:text="YY/MM/DD"
-            android:inputType="date" />
-
-        <Button
-            android:id="@+id/button_register"
-            android:layout_marginTop="20dp"
-            android:layout_width="120dp"
-            android:layout_gravity="center"
-            android:layout_height="wrap_content"
-            android:text="@string/register" />
-
+                <EditText
+                    android:id="@+id/num_days"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textStyle="italic"
+                    android:hint="Number of days"
+                    android:inputType="number" />
+                <EditText
+                    android:id="@+id/total_water_consumed"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="italic"
+                    android:hint="Total water consumed (liters)"
+                    android:inputType="numberDecimal" />
+                <EditText
+                    android:id="@+id/selling_price_per_unit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textStyle="italic"
+                    android:hint="Selling price per unit"
+                    android:inputType="numberDecimal" />
+                <EditText
+                    android:id="@+id/variable_cost_per_unit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textStyle="italic"
+                    android:hint="Variable cost per unit"
+                    android:inputType="numberDecimal" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+                <Button
+                    android:id="@+id/calculate_button"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Calculate" />
 </LinearLayout>
+</ScrollView>
+

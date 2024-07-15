@@ -11,101 +11,165 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import java.util.Date;
 
 public class expenditure_activity extends AppCompatActivity {
     MyDAO myDAO;
-    //initialising the button
-    Button button_expenditure;
-
-    //initialising AutoCompleteTextView for the fixed expenses fields category
-    AutoCompleteTextView fixedExpenses = findViewById(R.id.fixed_expenses);
+    private Float depreciationParse;
+    private Float indirectAmountParse;
+    private Float assetAmountParse;
+    private Float directAmountParse;
+    private String selectedTextAsset;
+    private String selectedTextIndirectAsset;
+    private String selectedTextDirectAsset;
+    private Button buttonAssets;
+    private Button buttonDirectAssets;
+    private Button buttonIndirectAssets;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_expenditure);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.exp), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
 
-        //initialising the edittext and expense category AutoCompleteTextView
-        AutoCompleteTextView expCat = findViewById(R.id.expenses_cat);
-        EditText exp = findViewById(R.id.expenses);
-        EditText expAmount = findViewById(R.id.expense_amount);
-        EditText expDate = findViewById(R.id.exp_creatd_date);
+        //initialising the AutoComplete Views
+        AutoCompleteTextView assetsCategory = findViewById(R.id.assetsCat);
+        AutoCompleteTextView directAssetsCategory = findViewById(R.id.directAssetsCat);
+        AutoCompleteTextView indirectAssetsCategory = findViewById(R.id.indirectAssetsCat);
+
+        //initialising edit text for Assets
+        EditText assetDescription = findViewById(R.id.descriptionAssets);
+        EditText assetDepreciation = findViewById(R.id.depreciationPercentageAssets);
+        EditText amountOnAsset = findViewById(R.id.assetsAmount);
+        EditText dateCreated = findViewById(R.id.assetsCreatedDate);
+
+        //initialising edit text for Direct Assets
+        EditText directAssetDescription = findViewById(R.id.descriptionDirectAssets);
+        EditText amountOnDirectAsset = findViewById(R.id.directAssetAmount);
+        EditText dateCreated_directA = findViewById(R.id.directAssetCreatedDate);
+
+        //initialising edit text for indirect Assets
+        EditText indirectDescription = findViewById(R.id.indirectDescriptionAssets);
+        EditText amountOnIndirect_A = findViewById(R.id.indirectExpenseAmount);
+        EditText dateCreated_indirectA = findViewById(R.id.indirectExpCreatedDate);
+
+        //initialising the buttons
+        buttonAssets = findViewById(R.id.addAssetExp);
+        buttonDirectAssets = findViewById(R.id.addDirectAssetsExp);
+        buttonIndirectAssets = findViewById(R.id.addIndirectAssets);
 
         //get array of suggestions from the resource for the Expense Category
-        String[] dropDownList = getResources().getStringArray(R.array.dropdown_array_expCat);
-        //create an arrayAdapter using the string array and default spinner layout
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line,dropDownList);
-        //apply adapter to the AutocompleteTextview
-        expCat.setAdapter(adapter);
+        String[] assetsDropDownList = getResources().getStringArray(R.array.dropdownArray_Assets);
+        String[] directAssetsDropDownList = getResources().getStringArray(R.array.dropdownArray_directCosts);
+        String[] indirectAssetsDropDownList = getResources().getStringArray(R.array.dropdownArray_indirectCosts);
 
-        // Listening for user input in the first AutoCompleteTextView expCat
-        expCat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        //create an arrayAdapter for each AutoComplete dropdown lists
+        ArrayAdapter<String> assetAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line,assetsDropDownList);
+        assetsCategory.setAdapter(assetAdapter);
+        ArrayAdapter<String> directAssetAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line,directAssetsDropDownList);
+        directAssetsCategory.setAdapter(directAssetAdapter);
+        ArrayAdapter<String> indirectAssetAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line,indirectAssetsDropDownList);
+        indirectAssetsCategory.setAdapter(indirectAssetAdapter);
+
+        //get the user selection from the autocomplete text view for DB insertion
+        assetsCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                selectedTextAsset = (String) adapterView.getItemAtPosition(position);
+            }
+        });
+        directAssetsCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String selectedOption = (String) adapterView.getItemAtPosition(i);
-                populateSuggestions(selectedOption);
+                selectedTextDirectAsset = (String) adapterView.getItemAtPosition(i);
+            }
+        });
+        indirectAssetsCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                selectedTextIndirectAsset = (String) adapterView.getItemAtPosition(i);
             }
         });
 
-        //onClickListener set to send data to the DB
-        button_expenditure.setOnClickListener(new View.OnClickListener() {
+        ///////////////////////onClickListener set to send Assets data to the DB
+        buttonAssets.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                float expAmtParse = 0;
-
-                String expCatInput = expCat.getText().toString();
-                String fixedExpInput = fixedExpenses.getText().toString();
-                String expInput = exp.getText().toString();
-                String expAmountInput= expAmount.getText().toString();
-                Date expDateInput = (Date) expDate.getText();
-
-                if(!expAmountInput.isEmpty()){
+                String assetDescriptionInput = assetDescription.getText().toString().trim();
+                String assetDepreciationInput = assetDepreciation.getText().toString().trim();//parse to float
+                String assetAmountInput= amountOnAsset.getText().toString().trim();//parse to float
+                Date assetDateInput = (Date) dateCreated.getText();
+                if(!assetDepreciationInput.isEmpty() || !assetAmountInput.isEmpty()){
                     try {
-                        expAmtParse = Float.parseFloat(expAmountInput);
+                      depreciationParse = Float.parseFloat(assetDepreciationInput);
+                      assetAmountParse = Float.parseFloat(assetAmountInput);
                     }catch (NumberFormatException e){
-                        Toast.makeText(expenditure_activity.this,"Invalid number entered",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(expenditure_activity.this,"Invalid Input Type",Toast.LENGTH_SHORT).show();
                     }
                 }
                 else {
-                    Toast.makeText(expenditure_activity.this,"enter number",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(expenditure_activity.this,"Enter valid Input Types",Toast.LENGTH_SHORT).show();
                 }
-                if(!expCatInput.isEmpty() || !expInput.isEmpty()){
-                    myDAO = new MyDAO(expenditure_activity.this);
-                    myDAO.open();
-                    myDAO.insertexpenditure(expCatInput,fixedExpInput,expInput,expAmtParse,expDateInput);
-                    myDAO.close();
-                }
-                else{
-                    Toast.makeText(expenditure_activity.this,"Please Fill in the Missing Information",Toast.LENGTH_SHORT).show();
-                }
+                myDAO = new MyDAO(expenditure_activity.this);
+                myDAO.open();
+                myDAO.insertAssetExpenditure(selectedTextAsset,assetDescriptionInput,depreciationParse,assetAmountParse,assetDateInput);
+                myDAO.close();
+                clearAssetsFields();
+            }
+        });
+        //onClickListener set to send Direct Assets data to the DB
+        buttonDirectAssets.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String directAssetDescriptInput = directAssetDescription.getText().toString().trim();
+                String directAssetAmountInput= amountOnDirectAsset.getText().toString().trim();//parse to float
+                String directAssetDateInput = dateCreated_directA.getText().toString().trim();
+                try {
+                    directAmountParse = Float.parseFloat(directAssetAmountInput);
+                }catch (NumberFormatException e){
+                    Toast.makeText(expenditure_activity.this,"Invalid Input Type",Toast.LENGTH_SHORT).show();
 
+                }
+                myDAO = new MyDAO(expenditure_activity.this);
+                myDAO.open();
+                myDAO.insertDirectAssetExpenditure(selectedTextDirectAsset,directAssetDescriptInput,directAmountParse,directAssetDateInput);
+                myDAO.close();
+            }
+        });
+        ///////////////////////onClickListener set to send Indirect Assets data to the DB
+        buttonIndirectAssets.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String indirectAssetDescriptInput = indirectDescription.getText().toString().trim();
+                String indirectAssetAmountInput= amountOnIndirect_A.getText().toString().trim();//parse to float
+                String indirectAssetDateInput = dateCreated_indirectA.getText().toString().trim();
+                try {
+                    indirectAmountParse = Float.parseFloat(indirectAssetAmountInput);
+                }catch (NumberFormatException e){
+                    Toast.makeText(expenditure_activity.this,"Invalid Input Type",Toast.LENGTH_SHORT).show();
+
+                }
+                myDAO = new MyDAO(expenditure_activity.this);
+                myDAO.open();
+                myDAO.insertIndirectAssetExpenditure(selectedTextIndirectAsset,indirectAssetDescriptInput,indirectAmountParse,indirectAssetDateInput);
+                myDAO.close();
             }
         });
 
 
     }
-    private void populateSuggestions(String selectedOption) {
-        String[] suggestions = {};
-        switch (selectedOption) {
-            case "Housing and Equipment":
-                suggestions = getResources().getStringArray(R.array.dropdownArray_fixedHousing);
-                break;
-            case "Insurance":
-                suggestions = getResources().getStringArray(R.array.dropdownArray_fixedInsurance);
-                break;
-            case "Others":
-                suggestions = getResources().getStringArray(R.array.dropdownArray_fixedOthers);
-                break;
-            default:
-                suggestions = getResources().getStringArray(R.array.dropdown_array_fixedCat);
-                break;
-        }
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, suggestions);
-        fixedExpenses.setAdapter(adapter);
+    private void clearAssetsFields() {
+        //Reminder to fill in the code to clear all input fields in all activities after user input
     }
+
 
 }

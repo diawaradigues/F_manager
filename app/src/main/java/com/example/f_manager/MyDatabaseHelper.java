@@ -1,5 +1,6 @@
 package com.example.f_manager;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -15,7 +16,9 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             "CREATE TABLE IF NOT EXISTS Cycles (" +
                     "Cycle_id INTEGER PRIMARY KEY AUTOINCREMENT,"+
                     "Cycle_title TEXT(255),"+
-                    "Created_date DATE,"+
+                    "Created_date TEXT(255),"+
+                    "Ended_date TEXT(255),"+
+                    "status TEXT(50), " + ///added the stats column
                     "User_id INTEGER,"+
                     "FOREIGN KEY(User_id) REFERENCES USER(User_id) ON DELETE CASCADE)";
     private static final String SQL_CREATE_FARM =
@@ -23,7 +26,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                     "Farm_id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "Farm_name TEXT(255)," +
                     "Budget_allotment REAL,"+
-                    "Created_date DATE,"+
+                    "Farm_location TEXT(255)," +
+                    "Created_date TEXT(255),"+
                     "User_id INTEGER ,"+
                     "Cycle_id INTEGER,"+
                     "FOREIGN KEY(Cycle_id) REFERENCES CYCLES(Cycle_id) ON DELETE CASCADE,"+
@@ -32,12 +36,12 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static final String SQL_CREATE_USER=
             "CREATE TABLE IF NOT EXISTS USER (" +
                     "User_id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "Name TEXT,"+
                     "Email TEXT(255)," +
                     "Role TEXT(255),"+
                     "Region TEXT(255),"+
                     "Phone_number INTEGER,"+
                     "Farm_id INTEGER,"+
-                    "Name TEXT,"+
                     "FOREIGN KEY(Farm_id) REFERENCES Farm(Farm_id) ON DELETE CASCADE)";
 
     private static final String SQL_CREATE_SALES=
@@ -53,21 +57,56 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                     "FOREIGN KEY(Cycle_id) REFERENCES CYCLES(Cycle_id) ON DELETE CASCADE,"+
                     "FOREIGN KEY(User_id) REFERENCES USER(User_id) ON DELETE CASCADE)";
 
-    private static final String SQL_CREATE_EXPENDITURE=
-            "CREATE TABLE IF NOT EXISTS Expenditure (" +
-                    "Expenditure_id INTEGER PRIMARY KEY AUTOINCREMENT," + 
-                    "Expense_Category TEXT(255)," +
-                    "Fixed_Expenses TEXT(255),"+
-                    "Expense TEXT(255),"+
-                    "Amount REAL,"+
+    private static final String SQL_CREATE_NON_FINANCIALS=
+            "CREATE TABLE IF NOT EXISTS nonFinancialsValues (" +
+                    "ID INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "productionYield DOUBLE," +
+                    "foodConversionRatio DOUBLE,"+
+                    "mortalityRate DOUBLE,"+
+                    "averageDailyGain DOUBLE,"+
+                    "waterConsumption DOUBLE,"+
+                    "breakEvenPoint DOUBLE)";
+    private static final String SQL_CREATE_ASSETS_EXP=
+            "CREATE TABLE IF NOT EXISTS Assets_Expenditure(" +
+                    "ID INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "AssetsCategory TEXT(255)," +
+                    "AssetsDescription TEXT(255),"+
+                    "AssetDepreciation REAL,"+
+                    "AssetsAmount REAL,"+
+                    "AssetCreatedDate DATE,"+
                     "User_id INTEGER,"+
                     "Cycle_id INTEGER,"+
-                    "Created_date_ DATE,"+
                     "Farm_id INTEGER,"+
-                    "Name TEXT,"+
                     "FOREIGN KEY(Farm_id) REFERENCES Farm(Farm_id) ON DELETE CASCADE,"+
                     "FOREIGN KEY(Cycle_id) REFERENCES CYCLES(Cycle_id) ON DELETE CASCADE,"+
                     "FOREIGN KEY(User_id) REFERENCES USER(User_id) ON DELETE CASCADE)";
+    private static final String SQL_CREATE_DIRECT_ASSETS_EXP=
+            "CREATE TABLE IF NOT EXISTS directAssets_Expenditure (" +
+                    "ID INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "directAssetsCategory TEXT(255)," +
+                    "directAssetsDescription TEXT(255),"+
+                    "directAssetsAmount REAL,"+
+                    "directAssetCreatedDate DATE,"+
+                    "User_id INTEGER,"+
+                    "Cycle_id INTEGER,"+
+                    "Farm_id INTEGER,"+
+                    "FOREIGN KEY(Farm_id) REFERENCES Farm(Farm_id) ON DELETE CASCADE,"+
+                    "FOREIGN KEY(Cycle_id) REFERENCES CYCLES(Cycle_id) ON DELETE CASCADE,"+
+                    "FOREIGN KEY(User_id) REFERENCES USER(User_id) ON DELETE CASCADE)";
+    private static final String SQL_CREATE_INDIRECT_ASSETS_EXP=
+            "CREATE TABLE IF NOT EXISTS indirectAssets_Expenditure (" +
+                    "ID INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "indirectAssetsCategory TEXT(255)," +
+                    "indirectAssetsDescription TEXT(255),"+
+                    "indirectAssetsAmount REAL,"+
+                    "indirectAssetCreatedDate DATE,"+
+                    "User_id INTEGER,"+
+                    "Cycle_id INTEGER,"+
+                    "Farm_id INTEGER,"+
+                    "FOREIGN KEY(Farm_id) REFERENCES Farm(Farm_id) ON DELETE CASCADE,"+
+                    "FOREIGN KEY(Cycle_id) REFERENCES CYCLES(Cycle_id) ON DELETE CASCADE,"+
+                    "FOREIGN KEY(User_id) REFERENCES USER(User_id) ON DELETE CASCADE)";
+
 
     public MyDatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME,null, DATABASE_VERSION);
@@ -79,8 +118,11 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("PRAGMA foreign_keys = ON;");
         sqLiteDatabase.execSQL(SQL_CREATE_FARM);
         sqLiteDatabase.execSQL(SQL_CREATE_USER);
-        sqLiteDatabase.execSQL(SQL_CREATE_EXPENDITURE);
+        sqLiteDatabase.execSQL(SQL_CREATE_ASSETS_EXP);
+        sqLiteDatabase.execSQL(SQL_CREATE_DIRECT_ASSETS_EXP);
+        sqLiteDatabase.execSQL(SQL_CREATE_INDIRECT_ASSETS_EXP);
         sqLiteDatabase.execSQL(SQL_CREATE_CYCLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_NON_FINANCIALS);
         sqLiteDatabase.execSQL(SQL_CREATE_SALES);
     }
 
@@ -90,4 +132,5 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS my_table");
         onCreate(sqLiteDatabase);
     }
+
 }
