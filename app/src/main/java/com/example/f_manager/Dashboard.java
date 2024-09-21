@@ -1,6 +1,11 @@
 package com.example.f_manager;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -10,19 +15,23 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.viewpager2.widget.ViewPager2;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.tabs.TabLayout;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 public class Dashboard extends AppCompatActivity {
-    private TabLayout tabLayout;
-    private ViewPager2 viewPager2;
-    private ViewPagerAdapter viewPagerAdapter;
-    //initialising the button
-    private Button buttonFarm ,buttonUser,buttonCalculate;
+    private RecyclerView recyclerView;
+    private CardAdapter cardAdapter;
+    private List<MyData> myDataList;
+    private Button buttonFarm ,buttonUser,buttonCalculate,button;
     private MyDAO myDAO;
     private Float fixedCostsInput;
-    private EditText farmName_,budgetFarm,locationFarm,createdDate,user,phone,email,region,role,numBroilersProducedInput, timePeriodInput, totalFeedConsumedInput, totalWeightGainInput,
+    private EditText cycleDateEnded,status,cycleDatedCreated,title_cycle,farmName_,budgetFarm,locationFarm,createdDate,user,phone,email,region,role,numBroilersProducedInput, timePeriodInput, totalFeedConsumedInput, totalWeightGainInput,
             numBroilersDiedInput, totalNumBroilersInput, numDaysInput, totalWaterConsumedInput,
             sellingPricePerUnitInput, variableCostPerUnitInput;
     @Override
@@ -35,38 +44,17 @@ public class Dashboard extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        //tab views
-       /* tabLayout = findViewById(R.id.tabLayout);
-        viewPager2 = findViewById(R.id.viewPager);
-        viewPagerAdapter = new ViewPagerAdapter(this);
-        viewPager2.setAdapter(viewPagerAdapter);
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager2.setCurrentItem(tab.getPosition());
-            }
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-        viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageSelected(int position) {
-                super.onPageSelected(position);
-                tabLayout.getTabAt(position).select();
-            }
-        });
-        */
+        button = findViewById(R.id.button_add_cycle);
         buttonFarm = findViewById(R.id.button_registerFarm);
         buttonCalculate =findViewById(R.id.calculate_button);
         buttonUser =  findViewById(R.id.button_registerUser);
+
+        //initialising cycles
+        title_cycle = findViewById(R.id.cycle_title);
+        cycleDatedCreated = findViewById(R.id.cycle_date_created);
+        cycleDateEnded = findViewById(R.id.cycle_date_ended);
+        status = findViewById(R.id.cycle_status);
 
         //initialising non financial metrics
         numBroilersProducedInput = findViewById(R.id.num_broilers_produced);
@@ -93,7 +81,21 @@ public class Dashboard extends AppCompatActivity {
         locationFarm = findViewById(R.id.farmLocation);
         createdDate = findViewById(R.id.editTextDate);
 
-        //setting an on click listener to the button
+        //initialising the recyclerView
+        recyclerView = findViewById(R.id.cycles_recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        //get data from DB for the recycle x                                                                                                                                             rView
+        myDAO = new MyDAO(this);
+        myDAO.open();
+        myDataList = myDAO.getCycleData();
+        cardAdapter =new CardAdapter(this,myDataList);
+        recyclerView.setAdapter(cardAdapter);
+        myDAO.close();
+
+        //sending data to Farm Cycles in the DB
+        button.setOnClickListener(view -> sendCycleDataToDb());
+
         buttonUser.setOnClickListener(view -> {
             postUserDataToDb();
         });
@@ -104,7 +106,37 @@ public class Dashboard extends AppCompatActivity {
             calculateMetrics();
         });
     }
+    private void sendCycleDataToDb() {
+        //grab the input from the views and store in the db
+        String title_cycle_input = title_cycle.getText().toString().trim();
+        String cycle_date_input = cycleDatedCreated.getText().toString().trim();
+        String cycleDateEndedInput = cycleDateEnded.getText().toString().trim();
+        String cycleStatus = status.getText().toString().trim();
 
+        //insert the data nto the database
+        myDAO = new MyDAO(Dashboard.this);
+        myDAO.open();
+        long cycleId = myDAO.insertFarmCycleData(title_cycle_input, cycle_date_input,cycleDateEndedInput,cycleStatus);
+        Toast.makeText(Dashboard.this,"Data posted Successfully",Toast.LENGTH_SHORT).show();
+        setCycleEndAlarm(cycleId,cycleDateEndedInput);
+        myDAO.close();
+    }
+    private void setCycleEndAlarm(long cycleId, String endDate) {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, EndedCycles.class);
+        intent.putExtra("cycleId", cycleId);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, (int) cycleId, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        try {
+            Date end = sdf.parse(endDate);
+            if (end != null && alarmManager != null) {
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, end.getTime(), pendingIntent);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
     //method to calculate non financials
     private void calculateMetrics() {
         //get input values
@@ -120,12 +152,12 @@ public class Dashboard extends AppCompatActivity {
         double variableCostPerUnit = Double.parseDouble(variableCostPerUnitInput.getText().toString());
 
         //getting direct cost from the Db
-        try {
-            myDAO.open();
-            fixedCostsInput = myDAO.getDirectCost();
-        }catch (NegativeArraySizeException e){
-            Toast.makeText(Dashboard.this,"Function cannot be completed at this moment",Toast.LENGTH_SHORT).show();
-        }
+
+        myDAO.open();
+        myDAO.insertNonFinancialMetrics(numBroilersProduced,timePeriod,totalFeedConsumed,totalWeightGain,numBroilersDied,
+                                        totalNumBroilers,numDays,totalWaterConsumed,sellingPricePerUnit,variableCostPerUnit);
+        fixedCostsInput = myDAO.getDirectCost();
+
 
         // Calculate contribution margin per unit
         double contributionMarginPerUnit = sellingPricePerUnit - variableCostPerUnit;
@@ -141,12 +173,12 @@ public class Dashboard extends AppCompatActivity {
         try {
             myDAO.insertNonFinancialData(productionYield,fcr,mortalityRate,adg,waterConsumption,bep);
             myDAO.close();
-        }catch (NumberFormatException e){
+            Toast.makeText(Dashboard.this,"Data posted Successfully",Toast.LENGTH_SHORT).show();
+        }catch (Exception e){
             Toast.makeText(Dashboard.this,"Function cannot be completed at this moment",Toast.LENGTH_SHORT).show();
         }
 
     }
-
     private void postUserDataToDb() {
         int phone_int=0;
         //grab new information from the user
@@ -162,7 +194,8 @@ public class Dashboard extends AppCompatActivity {
             myDAO.open();
             myDAO.insertUserUserData(user_input,email_input,role_input,region_input, phone_int);
             myDAO.close();
-        }catch (NumberFormatException e){
+            Toast.makeText(Dashboard.this,"Data posted Successfully",Toast.LENGTH_SHORT).show();
+        }catch (Exception e){
             Toast.makeText(Dashboard.this,"Function cannot be completed at this moment",Toast.LENGTH_SHORT).show();
         }
     }
@@ -178,9 +211,17 @@ public class Dashboard extends AppCompatActivity {
             budget_float = Float.parseFloat(budgetary_input);
             myDAO = new MyDAO(Dashboard.this);
             myDAO.open();
-            myDAO.insertFarmData(farmName_input,budget_float,farmLocationInput,createdDate_input);
+            long resultFarmInsert = myDAO.insertFarmData(farmName_input,budget_float,farmLocationInput,createdDate_input);
+
+            if (resultFarmInsert != -1) {
+                Log.d("Database Insert farm", "Insertion successful, ID: " + resultFarmInsert);
+            } else {
+                Log.d("Database Insertion", "Insertion failed.");
+            }
+
+            Toast.makeText(Dashboard.this,"Data posted Successfully",Toast.LENGTH_SHORT).show();
             myDAO.close();
-        }catch (NumberFormatException e){
+        }catch (Exception e){
             Toast.makeText(Dashboard.this,"Function cannot be completed at this moment",Toast.LENGTH_SHORT).show();
         }
     }

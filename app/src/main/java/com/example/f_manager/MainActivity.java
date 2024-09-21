@@ -14,15 +14,24 @@ import androidx.cardview.widget.CardView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -35,6 +44,8 @@ import retrofit2.http.Path;
 public class MainActivity extends AppCompatActivity {
     private static final int PICK_EXCEL_FILE = 1;
     private TextView text_view;
+    private MyDAO myDAO;
+    private List<String> tableNames;
     private FloatingActionButton floatingExcelButton;
     private Button buttonToAddCycles,buttonToEndedCycles;
 
@@ -56,11 +67,21 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        tableNames = Arrays.asList("indirectAssets_Expenditure", "directAssets_Expenditure",
+                "Assets_Expenditure", "nonFinancialsValues", "Sales", "USER", "Farm", "Cycles");
+
+        /////weekly report statements/////
+        PeriodicWorkRequest weeklyReportRequest = new PeriodicWorkRequest.Builder(WeeklyReportWorker.class, 7,
+                TimeUnit.DAYS)
+                .build();
+        WorkManager.getInstance(this).enqueue(weeklyReportRequest);
+
+
         //linking cardViews
         CardView toDashboard = findViewById(R.id.dashBoardCard);
         CardView farmStats_ = findViewById(R.id.farmstats_card);
         //CardView farmCycles_ = findViewById(R.id.farm_cycle_card);
-        CardView toSales = findViewById(R.id.salesCard);
+        //CardView toSales = findViewById(R.id.salesCard);
         CardView toExpenditure = findViewById(R.id.expenditureCard);
 
         //OnClickListener for floatingAction button to call the method openFilePicker
@@ -69,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         floatingExcelButton.setOnClickListener(view -> openFilePicker());
 
         //buttons to cycles
-        buttonToAddCycles = findViewById(R.id.button_ToNewCycles);
+        //buttonToAddCycles = findViewById(R.id.button_ToNewCycles);
         buttonToEndedCycles = findViewById(R.id.button_ToEndedCycles);
 
         //Setting an onclick listener on the card
@@ -83,19 +104,19 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
         //Toast.makeText(MainActivity.this,"Activity not found",Toast.LENGTH_SHORT).show();
-        buttonToAddCycles.setOnClickListener(view -> {
+       // buttonToAddCycles.setOnClickListener(view -> {
             //create an intent to start the Farm cycles activity
-            Intent intent = new Intent(MainActivity.this, Farm_cycles.class);
-            startActivity(intent);
-        });
+          //  Intent intent = new Intent(MainActivity.this, Farm_cycles.class);
+         //   startActivity(intent);
+      //  });
         buttonToEndedCycles.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, EndedCycles.class);
             startActivity(intent);
         });
-        toSales.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this,sales_activity.class);
-            startActivity(intent);
-        });
+       // toSales.setOnClickListener(view -> {
+        //    Intent intent = new Intent(MainActivity.this,sales_activity.class);
+        //    startActivity(intent);
+        //});
         toExpenditure.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this,expenditure_activity.class);
             startActivity(intent);
@@ -145,13 +166,24 @@ public class MainActivity extends AppCompatActivity {
         try (InputStream inputStream = getContentResolver().openInputStream(fileUri)) {
             assert inputStream != null;
             Workbook workbook = WorkbookFactory.create(inputStream);
-            Sheet sheet = workbook.getSheetAt(0);
-           // for (Row row : sheet) {
-                //String column1 = row.getCell(0).getStringCellValue();
-                //String column2 = row.getCell(1).getStringCellValue();
-                // Add other columns as needed
-                //databaseHelper.insertData(column1, column2);
-            //}
+
+            for (Sheet sheet : workbook) {
+                String sheetName = sheet.getSheetName();
+                if (tableNames.contains(sheetName)) {
+                    for (Row row : sheet) {
+                        if (row.getRowNum() == 0) continue; // Skip header row
+                        // Create a map to store column values
+                        Map<String, String> columnValues = new HashMap<>();
+                        for (Cell cell : row) {
+                            columnValues.put(String.valueOf(cell.getColumnIndex()), cell.toString());
+                        }
+                        myDAO = new MyDAO(this);
+                        myDAO.open();
+                        myDAO.insertData(sheetName, columnValues);
+                        myDAO.close();
+                    }
+                }
+            }
             Toast.makeText(this, "Data Imported Successfully", Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
             e.printStackTrace();

@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:padding="8dp"
+    android:layout_height="wrap_content">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cyclesEnded"
-    android:padding="8dp"
-    android:layout_gravity="center_vertical"
+    android:layout_margin="10dp"
     android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="400dp"
+    android:layout_height="wrap_content"
     tools:context=".EndedCycles">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Ended Cycles"
         android:textSize="22sp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="0dp"
         android:layout_marginBottom="20dp"
         android:layout_gravity="center_horizontal"
         android:textStyle="bold"/>
@@ -22,12 +26,70 @@
         android:id="@+id/recyclerView_endedCycles"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-    <Button
+   <!-- <Button
         android:id="@+id/refreshCyclesEnded"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Refresh"
         android:layout_marginTop="10dp"
-        android:layout_gravity="center_horizontal"/>
-
+        android:layout_gravity="center_horizontal"/>-->
+</LinearLayout>
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_margin="10dp"
+        android:orientation="vertical"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        tools:context=".EndedCycles">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Farm Data"
+            android:textSize="22sp"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="20dp"
+            android:layout_gravity="center_horizontal"
+            android:textStyle="bold"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView_farmData"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+       <!--<Button
+            android:id="@+id/button_farm_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="farm data"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center_horizontal"/> -->
+    </LinearLayout>
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_margin="10dp"
+        android:orientation="vertical"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        tools:context=".EndedCycles">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Non Financial Data Metrics"
+            android:textSize="22sp"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="20dp"
+            android:layout_gravity="center_horizontal"
+            android:textStyle="bold"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView_nonFinancialDataMetrics"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <!--<Button
+             android:id="@+id/button_farm_data"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="farm data"
+             android:layout_marginTop="10dp"
+             android:layout_gravity="center_horizontal"/> -->
+    </LinearLayout>
 </LinearLayout>

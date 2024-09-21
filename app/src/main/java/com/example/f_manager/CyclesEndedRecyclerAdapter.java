@@ -1,5 +1,6 @@
 package com.example.f_manager;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import java.util.List;
 
 public class CyclesEndedRecyclerAdapter extends RecyclerView.Adapter<CyclesEndedRecyclerAdapter.MyViewHolder> {
     private List<MyData> itemList;
+    private Context context;
 
     //views from the item xml file
     public static class MyViewHolder extends RecyclerView.ViewHolder {
@@ -25,7 +27,8 @@ public class CyclesEndedRecyclerAdapter extends RecyclerView.Adapter<CyclesEnded
         }
     }
     ///constructor
-    public CyclesEndedRecyclerAdapter(List<MyData> myDataList) {
+    public CyclesEndedRecyclerAdapter(Context context,List<MyData> myDataList) {
+        this.context = context;
         this.itemList=myDataList;
     }
     //the oncreate method for the class

@@ -1,6 +1,7 @@
 package com.example.f_manager;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -10,11 +11,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
 public class Farm_stats extends AppCompatActivity {
-    MyDAO myDAO;
+    private MyDAO myDAO;
+    private salesAdapter adapter;
+    private expendituresAdapter expAdapter;
+    private RecyclerView recyclerView,recyclerView2;
+    private List<salesDataList> salesList;
+    private List<expenditureDataList> expList;
+
     private List<myNonFinancialData> nonFinancialDataList;
     private final int percentageMargin =100;
     private TextView productionYield,feedConversionRate,averageDailyGain,mortalityRate,waterConsumption,breakEvenP,totalSalesView
@@ -33,6 +42,38 @@ public class Farm_stats extends AppCompatActivity {
             return insets;
         });
 
+        //sales recycler view setup
+        recyclerView = findViewById(R.id.sales_recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        myDAO = new MyDAO(this);
+        myDAO.open();
+        salesList = myDAO.getSalesData();
+        /*if (salesList != null && !salesList.isEmpty()) {
+            for (salesDataList cycle : salesList) {
+                Log.d("Data Retrieval", "Fetched Cycle: " + cycle.getCustomer());
+            }
+        } else {
+            Log.d("Data Retrieval", "No data found in database.");
+        }*/
+        adapter =new salesAdapter(this,salesList);
+        recyclerView.setAdapter(adapter);
+
+        //expenditure recycler view setup
+        recyclerView2 = findViewById(R.id.exp_recyclerView);
+        recyclerView2.setLayoutManager(new LinearLayoutManager(this));
+        expList = myDAO.getExpData();
+
+        if (expList != null && !expList.isEmpty()) {
+            for (expenditureDataList cycle : expList) {
+                Log.d("Data Retrieval", "Fetched Cycle: " + cycle.getDirectAssetsCategory());
+            }
+        } else {
+            Log.d("Data Retrieval", "No data found in database.");
+        }
+        expAdapter =new expendituresAdapter(this,expList);
+        recyclerView2.setAdapter(expAdapter);
+        myDAO.close();
+
         productionYield = findViewById(R.id.productionYieldValue);
         feedConversionRate = findViewById(R.id.feedConversionRateValue);
         averageDailyGain = findViewById(R.id.averageDailyGainValue);
@@ -48,20 +89,24 @@ public class Farm_stats extends AppCompatActivity {
 
     }//your next task is to link the data from db non financials to this activity textViews
     private void getFarmStatistics() {
-        myDAO = new MyDAO(Farm_stats.this);
         myDAO.open();
 
         /*values Gross Profit = Revenue − Direct Costs
         call the totals from the DB for in farm metrics
         */
+        totalSalesView = findViewById(R.id.totalSalesValue);
+        grossProfitView = findViewById(R.id.grossProfitValue);
+        netProfitView = findViewById(R.id.netProfitValue);
+
         totalSales = myDAO.getTotalRevenue();
         totalExpenses = myDAO.getDirectCost();
         totalIndirectExp = myDAO.getTotalIndirectExp();
-        myDAO.close();
 
         //value grossProfit
         grossProfit = totalSales - totalExpenses;
         netProfit = grossProfit - totalIndirectExp;
+        myDAO.insertFinancialStats(totalSales,grossProfit,netProfit);
+        myDAO.close();
 
         //setting the total sales, net profit and gross to the text views
         totalSalesView.setText(String.valueOf(totalSales));
